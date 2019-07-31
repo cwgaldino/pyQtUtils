@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyQtUtils",
-    version="0.0.5",
+    version="0.0.6",
     author="Carlos Galdino",
     author_email="galdino@ifi.unicamp.br",
     description="Utility functions useful when programming and developing pyQt5 applications.",

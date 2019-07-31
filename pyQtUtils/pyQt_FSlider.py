@@ -41,15 +41,12 @@ class FSlider(QtWidgets.QSlider):
 
     def setStep(self, newStep):
         """Set slider step value."""
-        # self.val_remainder = 0
         max = self.max()
         min = self.min()
         oldValue = self.val()
         self._step = newStep
         self.setMax(max)
         self.setMin(min)
-        # print('oldvalue---')
-        # print(oldValue)
         self.setVal(oldValue)
 
     def step(self):
@@ -77,16 +74,10 @@ class FSlider(QtWidgets.QSlider):
     def val(self):
         """Return slider value."""
         val = float(super().value())*self.step() + self.val_remainder
-        print('val==============')
-        print(super().value())
-        print(self.val_remainder)
-        print(self.step())
         if val < self.min():
             val = self.min()
         elif val > self.max():
             val = self.max()
-        # print('val function')
-        # print(super().value())
         return val
 
     def setVal(self, val):
@@ -96,16 +87,8 @@ class FSlider(QtWidgets.QSlider):
         elif val > self.max():
             val = self.max()
         self.val_remainder = float(Decimal(str(val)) % Decimal(str(self.step())))
-        # print('setVal==============')
-        # print(val)
-        # print(self.val_remainder)
-        # print(int(val/self.step()))
         return super().setValue(int(val/self.step()))
-# float(Decimal(5) % Decimal(0.4))
-# 5/0.3
-# 5/0.4
-# 0.4*12
-# 16*0.3
+
 
 class FSlider_win(QtGui.QWidget):
     """Opens a dedicated window to edit the parameters of a FSlider.

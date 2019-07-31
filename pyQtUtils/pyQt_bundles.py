@@ -93,6 +93,7 @@ def update_slider_from_text(self, label, lineEdit, slider, dict2connect=None):
     try:
         self.update()
     except Exception as e:
+        print('====pyQt_bundles.update_slider_from_text warning====')
         print('WARNING: Cannot run self.update()')
         print(e)
 
@@ -113,6 +114,7 @@ def update_lineEdit_from_slider(self, label, slider, lineEdit, dict2connect=None
     try:
         self.update()
     except Exception as e:
+        print('====pyQt_bundles.update_lineEdit_from_slider warning====')
         print('WARNING: Cannot run self.update()')
         print(e)
 
@@ -215,6 +217,7 @@ def update_comboBox_from_lineEdit(self, label, comboBox, lineEdit, dict2connect=
     try:
         self.update()
     except Exception as e:
+        print('====pyQt_bundles.update_comboBox_from_lineEdit warning====')
         print('WARNING: Cannot run self.update()')
         print(e)
 
@@ -235,6 +238,7 @@ def update_lineEdit_from_comboBox(self, label, comboBox, lineEdit, dict2connect=
     try:
         self.update()
     except Exception as e:
+        print('====pyQt_bundles.update_lineEdit_from_comboBox warning====')
         print('WARNING: Cannot run self.update()')
         print(e)
 
