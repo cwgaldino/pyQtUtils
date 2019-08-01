@@ -9,7 +9,6 @@ from decimal import Decimal
 from pyqtgraph.Qt import QtGui
 from pyqtgraph.Qt import uic, QtWidgets
 
-
 class FSlider(QtWidgets.QSlider):
     """Create QtWidgets.QSlider object that allows float steps.
 

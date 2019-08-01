@@ -25,6 +25,9 @@ def FSliderBundle(self, label, min, max, step, value, dict2connect=None, extra_t
     to your "app's update method". Therefore if FSlider value is changed it
     tries to run app.update(). If app.update() does not exists nothing heppens.
 
+    .. warning:: programatically changes on FSliderBundle value do not
+    necessarily trigger app.update().
+
     .. note:: lineEdit does not respect min and max limits of the slider.
 
     Args:
@@ -96,6 +99,7 @@ def update_slider_from_text(self, label, lineEdit, slider, dict2connect=None):
         print('====pyQt_bundles.update_slider_from_text warning====')
         print('WARNING: Cannot run self.update()')
         print(e)
+        print('==========================================================')
 
 
 def update_lineEdit_from_slider(self, label, slider, lineEdit, dict2connect=None):
@@ -117,6 +121,7 @@ def update_lineEdit_from_slider(self, label, slider, lineEdit, dict2connect=None
         print('====pyQt_bundles.update_lineEdit_from_slider warning====')
         print('WARNING: Cannot run self.update()')
         print(e)
+        print('==========================================================')
 
 
 def comboBoxBundle(self, label, value, valueList, dict2connect=None, extra_text=None):
@@ -166,7 +171,6 @@ def comboBoxBundle(self, label, value, valueList, dict2connect=None, extra_text=
         valueList.append(value)
     idx = valueList.index(value)
     comboBox['comboBox'].addItems(valueList)
-    # index = comboBox['comboBox'].findText(value, QtCore.Qt.MatchFixedString)
     comboBox['comboBox'].setCurrentIndex(idx)
 
     # text
@@ -175,6 +179,8 @@ def comboBoxBundle(self, label, value, valueList, dict2connect=None, extra_text=
     else:
         comboBox['txt'] = QtGui.QLabel(label+' '+extra_text, self)
     comboBox['txt'].adjustSize()
+    comboBox['txt'].setFixedWidth(comboBox['txt'].width())
+    # comboBox['txt'].setStyleSheet("QLabel {background-color: red;}")
 
     # lineEdit
     comboBox['lineEdit'] = QtGui.QLineEdit(self)
@@ -185,7 +191,7 @@ def comboBoxBundle(self, label, value, valueList, dict2connect=None, extra_text=
     # Connect
     comboBox['btn'].clicked.connect(partial(delComboBoxItem, self, label, comboBox['comboBox'], dict2connect=dict2connect))
     comboBox['lineEdit'].editingFinished.connect(partial(update_comboBox_from_lineEdit, self, label, comboBox['comboBox'], comboBox['lineEdit'], dict2connect=dict2connect))
-    comboBox['comboBox'].currentIndexChanged.connect(partial(update_lineEdit_from_comboBox, self, label, comboBox['comboBox'], comboBox['lineEdit'], dict2connect=dict2connect))
+    comboBox['comboBox'].currentTextChanged.connect(partial(update_lineEdit_from_comboBox, self, label, comboBox['comboBox'], comboBox['lineEdit'], dict2connect=dict2connect))
 
     return comboBox
 
@@ -220,11 +226,12 @@ def update_comboBox_from_lineEdit(self, label, comboBox, lineEdit, dict2connect=
         print('====pyQt_bundles.update_comboBox_from_lineEdit warning====')
         print('WARNING: Cannot run self.update()')
         print(e)
+        print('==========================================================')
 
 
 def update_lineEdit_from_comboBox(self, label, comboBox, lineEdit, dict2connect=None):
     """Update lineEdit based on change in comboBox."""
-    value = comboBox.currentText()
+    value = str(comboBox.currentText())
     if dict2connect is not None:
         try:
             dict2connect[label]['value'] = value
@@ -241,18 +248,21 @@ def update_lineEdit_from_comboBox(self, label, comboBox, lineEdit, dict2connect=
         print('====pyQt_bundles.update_lineEdit_from_comboBox warning====')
         print('WARNING: Cannot run self.update()')
         print(e)
+        print('==========================================================')
 
 
 def delComboBoxItem(self, label, comboBox, dict2connect=None):
     """Delete item from combobox."""
+    comboBox.blockSignals(True)
     value = comboBox.currentText()
     valueList = [comboBox.itemText(i) for i in range(comboBox.count())]
     index = comboBox.findText(value, QtCore.Qt.MatchFixedString)
     if index != -1:
         del valueList[index]
         comboBox.clear()
+        comboBox.blockSignals(False)
         comboBox.addItems(valueList)
-    comboBox.setCurrentIndex(0)
+        comboBox.setCurrentIndex(0)
     if dict2connect is not None:
         try:
             dict2connect[label]['valueList'] = valueList
